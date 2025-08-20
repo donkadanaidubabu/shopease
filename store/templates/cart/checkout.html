@@ -1,0 +1,396 @@
+{% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Page Header -->
+            <div class="d-flex align-items-center mb-4">
+                <h2 class="mb-0 text-primary">
+                    <i class="fas fa-credit-card me-2"></i>Checkout
+                </h2>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Customer Information Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user me-2"></i>Customer Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_first_name" class="form-label">First Name *</label>
+                                <input type="text" class="form-control" id="id_first_name" name="first_name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_last_name" class="form-label">Last Name *</label>
+                                <input type="text" class="form-control" id="id_last_name" name="last_name" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_email" class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="id_email" name="email" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_phone" class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-control" id="id_phone" name="phone" required>
+                            </div>
+                        </div>
+
+                        <!-- Original form fields (hidden to maintain backend compatibility) -->
+                        <div style="display: none;">
+                            {{ form.as_p }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Address Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-truck me-2"></i>Shipping Address
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="id_street_address" class="form-label">Street Address *</label>
+                            <input type="text" class="form-control" id="id_street_address" name="street_address"
+                                   placeholder="House number, building name, street name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_apartment" class="form-label">Apartment, suite, etc. (optional)</label>
+                            <input type="text" class="form-control" id="id_apartment" name="apartment"
+                                   placeholder="Apartment, suite, unit, building, floor, etc.">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_city" class="form-label">City *</label>
+                                <input type="text" class="form-control" id="id_city" name="city" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_state" class="form-label">State *</label>
+                                <select class="form-select" id="id_state" name="state" required>
+                                    <option value="">Select State</option>
+                                    <option value="AP">Andhra Pradesh</option>
+                                    <option value="AR">Arunachal Pradesh</option>
+                                    <option value="AS">Assam</option>
+                                    <option value="BR">Bihar</option>
+                                    <option value="CG">Chhattisgarh</option>
+                                    <option value="GA">Goa</option>
+                                    <option value="GJ">Gujarat</option>
+                                    <option value="HR">Haryana</option>
+                                    <option value="HP">Himachal Pradesh</option>
+                                    <option value="JH">Jharkhand</option>
+                                    <option value="KA">Karnataka</option>
+                                    <option value="KL">Kerala</option>
+                                    <option value="MP">Madhya Pradesh</option>
+                                    <option value="MH">Maharashtra</option>
+                                    <option value="MN">Manipur</option>
+                                    <option value="ML">Meghalaya</option>
+                                    <option value="MZ">Mizoram</option>
+                                    <option value="NL">Nagaland</option>
+                                    <option value="OD">Odisha</option>
+                                    <option value="PB">Punjab</option>
+                                    <option value="RJ">Rajasthan</option>
+                                    <option value="SK">Sikkim</option>
+                                    <option value="TN">Tamil Nadu</option>
+                                    <option value="TS">Telangana</option>
+                                    <option value="TR">Tripura</option>
+                                    <option value="UP">Uttar Pradesh</option>
+                                    <option value="UK">Uttarakhand</option>
+                                    <option value="WB">West Bengal</option>
+                                    <option value="AN">Andaman and Nicobar Islands</option>
+                                    <option value="CH">Chandigarh</option>
+                                    <option value="DH">Dadra and Nagar Haveli</option>
+                                    <option value="DD">Daman and Diu</option>
+                                    <option value="DL">Delhi</option>
+                                    <option value="JK">Jammu and Kashmir</option>
+                                    <option value="LA">Ladakh</option>
+                                    <option value="LD">Lakshadweep</option>
+                                    <option value="PY">Puducherry</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_pincode" class="form-label">PIN Code *</label>
+                                <input type="text" class="form-control" id="id_pincode" name="pincode"
+                                       pattern="[0-9]{6}" maxlength="6" placeholder="6-digit PIN code" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_landmark" class="form-label">Landmark (optional)</label>
+                                <input type="text" class="form-control" id="id_landmark" name="landmark"
+                                       placeholder="Near by landmark">
+                            </div>
+                        </div>
+
+                        <!-- Address Type -->
+                        <div class="mb-3">
+                            <label class="form-label">Address Type</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="address_type" id="home" value="home" checked>
+                                    <label class="form-check-label" for="home">
+                                        <i class="fas fa-home me-1"></i> Home
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="address_type" id="office" value="office">
+                                    <label class="form-check-label" for="office">
+                                        <i class="fas fa-building me-1"></i> Office
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="address_type" id="other" value="other">
+                                    <label class="form-check-label" for="other">
+                                        <i class="fas fa-map-marker-alt me-1"></i> Other
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-credit-card me-2"></i>Payment Method
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check payment-option">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="cod" value="cod" checked>
+                                    <label class="form-check-label w-100" for="cod">
+                                        <div class="payment-card">
+                                            <i class="fas fa-money-bill-wave fa-2x text-success mb-2"></i>
+                                            <div class="fw-bold">Cash on Delivery</div>
+                                            <small class="text-muted">Pay when you receive</small>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check payment-option">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="upi" value="upi">
+                                    <label class="form-check-label w-100" for="upi">
+                                        <div class="payment-card">
+                                            <i class="fab fa-google-pay fa-2x text-primary mb-2"></i>
+                                            <div class="fw-bold">UPI Payment</div>
+                                            <small class="text-muted">Pay using UPI</small>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check payment-option">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="card" value="card">
+                                    <label class="form-check-label w-100" for="card">
+                                        <div class="payment-card">
+                                            <i class="far fa-credit-card fa-2x text-info mb-2"></i>
+                                            <div class="fw-bold">Credit/Debit Card</div>
+                                            <small class="text-muted">Secure payment</small>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-shopping-bag me-2"></i>Order Summary
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">Product</th>
+                                        <th scope="col" class="text-center">Quantity</th>
+                                        <th scope="col" class="text-end">Price</th>
+                                        <th scope="col" class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in cart_items %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ item.product.name }}</strong>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-light text-dark">{{ item.quantity }}</span>
+                                        </td>
+                                        <td class="text-end">₹{{ item.price }}</td>
+                                        <td class="text-end">
+                                            <strong>₹{{ item.total_price }}</strong>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-warning">
+                                        <td colspan="3" class="text-end">
+                                            <strong>Total Amount:</strong>
+                                        </td>
+                                        <td class="text-end">
+                                            <strong class="fs-5 text-success">₹{{ total_price }}</strong>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex flex-column flex-md-row gap-3 justify-content-between">
+                    <a href="{% url 'cart:view_cart' %}" class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Cart
+                    </a>
+                    <button type="submit" class="btn btn-success btn-lg px-5">
+                        <i class="fas fa-check-circle me-2"></i>Place Order
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 12px;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+    padding: 1rem 1.5rem;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    padding: 1rem 0.75rem;
+}
+
+.table td {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+}
+
+.btn-lg {
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.payment-option {
+    height: 100%;
+}
+
+.payment-card {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.payment-card:hover {
+    border-color: #007bff;
+    background-color: #f8f9fa;
+}
+
+.form-check-input:checked + .form-check-label .payment-card {
+    border-color: #007bff;
+    background-color: #e3f2fd;
+}
+
+.form-check-input {
+    position: absolute;
+    opacity: 0;
+}
+
+.form-check-label {
+    cursor: pointer;
+}
+
+.address-type-option {
+    background-color: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-right: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.address-type-option:hover {
+    border-color: #007bff;
+    background-color: #e3f2fd;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+
+    .btn-lg {
+        width: 100%;
+    }
+
+    .payment-card {
+        height: 100px;
+        padding: 1rem;
+    }
+
+    .payment-card i {
+        font-size: 1.5rem !important;
+    }
+}
+</style>
+{% endblock %}

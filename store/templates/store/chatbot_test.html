@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-3">Chat with ShopEase Assistant 🤖</h2>
+
+  <div id="chat-box" class="border rounded p-3 mb-3" style="height:400px; overflow-y:auto; background:#f9f9f9;"></div>
+
+  <input type="text" id="user-input" class="form-control mb-2" placeholder="Type your message...">
+  <button id="send-btn" class="btn btn-primary">Send</button>
+</div>
+
+<script>
+  const chatBox = document.getElementById('chat-box');
+  const userInput = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
+
+  function appendMessage(sender, text) {
+    const msgDiv = document.createElement('div');
+    msgDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  sendBtn.addEventListener('click', () => {
+    const message = userInput.value.trim();
+    if (!message) return;
+    appendMessage('You', message);
+    userInput.value = '';
+
+    // Temporary bot response
+    setTimeout(() => {
+      appendMessage('Bot', 'Hello! You said: ' + message);
+    }, 500);
+  });
+
+  // Optional: press Enter to send
+  userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendBtn.click();
+  });
+</script>
+{% endblock %}

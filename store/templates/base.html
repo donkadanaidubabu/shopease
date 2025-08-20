@@ -1,0 +1,881 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}E-Commerce{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/logo/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/logo/favicon-16x16.png' %}">
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            padding-top: 80px;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        /* Simple Navbar */
+        .navbar {
+            background: white !important;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 12px 0;
+        }
+
+        /* Logo Integration */
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #333 !important;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 8px 0;
+        }
+
+        .navbar-brand:hover {
+            color: #007bff !important;
+            transform: translateY(-1px);
+        }
+
+        /* Logo Image Styles - Optimized for ShopEase logo */
+        .logo-image {
+            height: 42px;
+            width: auto;
+            max-width: 220px;
+            margin-right: 8px;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        }
+
+        .logo-image:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+        }
+
+        /* Logo Text - Complementary styling for ShopEase logo */
+        .logo-text {
+            font-weight: 600;
+            font-size: 1.4rem;
+            color: #3a4750;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        /* Hide text when logo image exists since logo already contains text */
+        .has-logo .logo-text {
+            display: none;
+        }
+
+        /* Hide emoji when logo image exists */
+        .has-logo .logo-emoji {
+            display: none;
+        }
+
+        /* Show emoji only when no logo image */
+        .no-logo .logo-emoji::before {
+            content: '🏪';
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* Simple Navigation Links */
+        .nav-link {
+            color: #666 !important;
+            font-weight: 500;
+            padding: 8px 16px !important;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+            margin: 0 3px;
+        }
+
+        .nav-link:hover {
+            background: #f8f9fa;
+            color: #333 !important;
+        }
+
+        /* Categories dropdown styling */
+        .dropdown-menu {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 8px 0;
+        }
+
+        .dropdown-item {
+            color: #666;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        /* Special styling for user greeting */
+        .nav-link.user-greeting {
+            background: #28a745;
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .nav-link.user-greeting:hover {
+            background: #218838;
+            color: white !important;
+        }
+
+        /* Logout link styling */
+        .nav-link.logout-link {
+            background: #dc3545;
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .nav-link.logout-link:hover {
+            background: #c82333;
+            color: white !important;
+        }
+
+        /* Login/Register links */
+        .nav-link.auth-link {
+            background: #007bff;
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .nav-link.auth-link:hover {
+            background: #0056b3;
+            color: white !important;
+        }
+
+        /* Cart link styling - New addition */
+        .nav-link.cart-link {
+            background: #fd7e14;
+            color: white !important;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .nav-link.cart-link:hover {
+            background: #e76b00;
+            color: white !important;
+        }
+
+        /* My Orders link styling */
+        .nav-link.orders-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff !important;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link.orders-link:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+            color: #ffffff !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Cart badge styling */
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 0.7rem;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Mobile menu toggle */
+        .navbar-toggler {
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 37, 41, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Simple Alert Messages */
+        .alert {
+            border: 1px solid;
+            border-radius: 5px;
+            padding: 12px 16px;
+            margin: 15px 0;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+
+        /* Simple content wrapper */
+        .content-wrapper {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Loading state for logo */
+        .logo-image.loading {
+            opacity: 0;
+            animation: logoFadeIn 0.5s ease-in-out forwards;
+        }
+
+        @keyframes logoFadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ================= Chatbot Styles ================= */
+        .chatbox {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border: none;
+            border-radius: 16px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 15px 30px rgba(0, 123, 255, 0.12), 0 5px 15px rgba(0, 0, 0, 0.08);
+            font-family: 'Poppins', sans-serif;
+            z-index: 9999;
+            overflow: hidden;
+            animation: slideUp 0.3s ease-out;
+            max-width: calc(100vw - 40px);
+            max-height: calc(100vh - 40px);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px) scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .chatbox-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 16px 16px 0 0;
+            font-weight: 600;
+            font-size: 14px;
+            position: relative;
+            min-height: 50px;
+        }
+
+        .chatbox-header .header-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .chatbox-header .header-title::before {
+            content: '🤖';
+            font-size: 16px;
+        }
+
+        .chatbox-header button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .chatbox-header button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .chatbox-messages {
+            flex: 1;
+            padding: 16px 14px;
+            overflow-y: auto;
+            font-size: 13px;
+            background: transparent;
+            min-height: 0;
+        }
+
+        .chatbox-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chatbox-messages::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 2px;
+        }
+
+        .chatbox-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .chatbox-input {
+            display: flex;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid rgba(102, 126, 234, 0.1);
+            gap: 10px;
+            align-items: center;
+            min-height: 60px;
+        }
+
+        .chatbox-input input {
+            flex: 1;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            padding: 10px 14px;
+            font-size: 13px;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.2s ease;
+            min-width: 0;
+        }
+
+        .chatbox-input input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+
+        .chatbox-input input::placeholder {
+            color: #adb5bd;
+        }
+
+        .chatbox-input button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+            font-size: 12px;
+            flex-shrink: 0;
+            min-width: 60px;
+        }
+
+        .chatbox-input button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .chatbox-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.25);
+            z-index: 9998;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbox-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+        }
+
+        .chatbox-toggle.pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .chat-msg {
+            margin: 10px 0;
+            padding: 10px 14px;
+            border-radius: 16px;
+            max-width: 80%;
+            clear: both;
+            font-size: 12px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            position: relative;
+            animation: messageSlide 0.2s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            float: right;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .chat-bot {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #495057;
+            float: left;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 16px 12px;
+            color: #6c757d;
+            font-style: italic;
+            opacity: 0.8;
+            font-size: 12px;
+            border-radius: 12px;
+            background: rgba(102, 126, 234, 0.05);
+            margin: 0 0 10px 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991px) {
+            .navbar-nav {
+                background: #f8f9fa;
+                border-radius: 5px;
+                padding: 15px;
+                margin-top: 10px;
+                border: 1px solid #e0e0e0;
+            }
+
+            .nav-link {
+                margin: 3px 0;
+                text-align: center;
+            }
+
+            .cart-badge {
+                position: static;
+                margin-left: 8px;
+            }
+
+            /* Chatbot responsive adjustments */
+            .chatbox {
+                width: 280px;
+                height: 360px;
+                bottom: 18px;
+                right: 18px;
+            }
+
+            .chatbox-toggle {
+                bottom: 18px;
+                right: 18px;
+                width: 52px;
+                height: 52px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+
+            .navbar-brand {
+                font-size: 1.3rem;
+            }
+
+            .logo-image {
+                height: 36px;
+                margin-right: 6px;
+            }
+
+            .logo-text {
+                font-size: 1.3rem;
+            }
+
+            .content-wrapper {
+                padding: 20px;
+                margin: 10px 0;
+            }
+
+            /* Mobile chatbot adjustments */
+            .chatbox {
+                width: 250px;
+                height: 350px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo-image {
+                height: 32px;
+                margin-right: 4px;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+
+            /* Small mobile chatbot adjustments */
+            .chatbox {
+                width: 240px;
+                height: 300px;
+                right: 10px;
+                bottom: 10px;
+            }
+
+            .chatbox-toggle {
+                width: 44px;
+                height: 44px;
+                font-size: 16px;
+                right: 10px;
+                bottom: 10px;
+            }
+
+            .chat-msg {
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+
+            .chatbox-input {
+                padding: 10px;
+            }
+
+            .chatbox-input input {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .chatbox-input button {
+                padding: 8px 10px;
+                font-size: 11px;
+                min-width: 50px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .navbar {
+                box-shadow: none;
+                border-bottom: 1px solid #000;
+            }
+
+            .logo-image {
+                filter: grayscale(100%);
+            }
+
+            /* Hide chatbot in print */
+            .chatbox,
+            .chatbox-toggle {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Your Simple Navbar - Added to existing theme -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <!-- Keep original logo functionality -->
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <!-- Logo Image (will be hidden if image doesn't exist) -->
+                <img src="{% static 'images/logo/logo.png' %}"
+                     alt="ShopEase Logo"
+                     class="logo-image loading"
+                     onerror="this.style.display='none'; this.parentElement.classList.add('no-logo'); this.parentElement.classList.remove('has-logo');"
+                     onload="this.style.display='block'; this.parentElement.classList.add('has-logo'); this.parentElement.classList.remove('no-logo'); this.classList.remove('loading');">
+
+                <!-- Logo Text (always visible, but emoji hidden when image exists) -->
+                <span class="logo-text">
+                    <span class="logo-emoji"></span>ShopEase
+                </span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+
+                    <!-- Categories Dropdown - Keep original functionality -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            📂 Categories
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
+                            {% for category in categories %}
+                                <li><a class="dropdown-item" href="{% url 'product_by_category' category.id %}">{{ category.name }}</a></li>
+                            {% empty %}
+                                <li><a class="dropdown-item text-muted" href="#">No categories available</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product-list-html' %}">
+                            🛍️ Products
+                        </a>
+                    </li>
+
+                    <!-- 🛒 Cart Button - Keep original functionality -->
+                    <li class="nav-item">
+                        <a class="nav-link cart-link" href="{% url 'cart:view_cart' %}">
+                            🛒 Cart
+                            {% if cart_item_count > 0 %}
+                                <span class="badge bg-primary cart-badge">{{ cart_item_count }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                        <!-- Add My Orders link -->
+                        <li class="nav-item">
+                            <a class="nav-link orders-link" href="{% url 'my-orders' %}">📦 My Orders</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link user-greeting" href="#">
+                                👋 Hi, {{ user.username }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link logout-link" href="{% url 'logout' %}">
+                                🚪 Logout
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link auth-link" href="{% url 'login' %}">
+                                🔑 Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link auth-link" href="{% url 'register' %}">
+                                📝 Register
+                            </a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+        {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="content-wrapper">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- ================= Chatbot Widget ================= -->
+    <div id="chatbox" class="chatbox">
+        <div class="chatbox-header">
+            <div class="header-title">ShopEase Assistant</div>
+            <button onclick="toggleChatbox()" title="Close Chat">✖</button>
+        </div>
+        <div id="chatbox-messages" class="chatbox-messages">
+            <div class="welcome-message">
+                👋 Hi! I'm your ShopEase Assistant. How can I help you today?
+            </div>
+        </div>
+        <div class="chatbox-input">
+            <input type="text" id="chatbox-input-field" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter'){sendMessage();}">
+            <button onclick="sendMessage()" title="Send Message">Send</button>
+        </div>
+    </div>
+    <button id="chatbox-toggle" class="chatbox-toggle pulse" onclick="toggleChatbox()" title="Chat with us!">💬</button>
+    <!-- ================= End Chatbot Widget ================= -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    alert.style.opacity = '0.5';
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                }, 5000);
+            });
+        });
+
+        // Logo loading and fallback handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoImg = document.querySelector('.logo-image');
+            const navbarBrand = document.querySelector('.navbar-brand');
+
+            // Set initial state
+            navbarBrand.classList.add('no-logo');
+
+            // Handle logo loading
+            if (logoImg) {
+                logoImg.addEventListener('load', function() {
+                    navbarBrand.classList.remove('no-logo');
+                    navbarBrand.classList.add('has-logo');
+                });
+
+                logoImg.addEventListener('error', function() {
+                    navbarBrand.classList.add('no-logo');
+                    navbarBrand.classList.remove('has-logo');
+                    this.style.display = 'none';
+                });
+            }
+        });
+
+        // ================= Chatbot JavaScript =================
+        function toggleChatbox() {
+            const chatbox = document.getElementById("chatbox");
+            const toggleBtn = document.getElementById("chatbox-toggle");
+            if (chatbox.style.display === "flex") {
+                chatbox.style.display = "none";
+                toggleBtn.style.display = "block";
+            } else {
+                chatbox.style.display = "flex";
+                toggleBtn.style.display = "none";
+            }
+        }
+
+        async function sendMessage() {
+            const inputField = document.getElementById("chatbox-input-field");
+            const message = inputField.value.trim();
+            if (!message) return;
+
+            // Display user message
+            appendMessage(message, "chat-user");
+            inputField.value = "";
+
+            try {
+                const response = await fetch("/chat/message/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message })
+                });
+                const data = await response.json();
+                if (data.reply) {
+                    appendMessage(data.reply, "chat-bot");
+                } else {
+                    appendMessage("⚠️ Error: No reply from server.", "chat-bot");
+                }
+            } catch (err) {
+                appendMessage("⚠️ Failed to connect to chatbot.", "chat-bot");
+            }
+        }
+
+        function appendMessage(text, className) {
+            const msgContainer = document.getElementById("chatbox-messages");
+            const msgDiv = document.createElement("div");
+            msgDiv.className = "chat-msg " + className;
+            msgDiv.textContent = text;
+            msgContainer.appendChild(msgDiv);
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+        }
+        // ================= End Chatbot JavaScript =================
+    </script>
+</body>
+</html>

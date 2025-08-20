@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<style>
+    .product-image {
+        max-width: 100%;
+        height: auto;
+        max-height: 400px;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto 20px auto;
+    }
+
+    .product-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        background-color: #fff;
+    }
+
+    .price {
+        color: green;
+        font-weight: bold;
+        font-size: 22px;
+    }
+
+    ul.bullet-points {
+        padding-left: 20px;
+    }
+
+    ul.bullet-points li {
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="product-container">
+    {% if product.image_url %}
+        <img src="{{ product.image_url.url }}" alt="{{ product.name }}" class="product-image">
+    {% endif %}
+    <h2>{{ product.name }}</h2>
+    <p class="price">₹{{ product.price }}</p>
+    <p>{{ product.description }}</p>
+
+    {% if product.highlights %}
+        <hr>
+        <h5><strong>About this item</strong></h5>
+        <ul class="bullet-points">
+            {% for line in product.highlights.splitlines %}
+                {% if line.strip %}
+                    <li>{{ line|striptags }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}
