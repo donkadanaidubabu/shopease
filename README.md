@@ -46,8 +46,3 @@ python manage.py runserver
 - User registration and login
 - Admin panel for managing products and categories
 
-## License
-Specify license here (optional)
-
-
-Save and close the file.
